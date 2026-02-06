@@ -12,11 +12,13 @@ require_once __DIR__ . '/utils/hex-to-rgba.php';
 require_once __DIR__ . '/utils/color-slug-to-color-code.php';
 require_once __DIR__ . '/utils/array-merge.php';
 require_once __DIR__ . '/utils/minify-css.php';
+require_once __DIR__ . '/extensions/core/heading.php';
+require_once __DIR__ . '/extensions/core/image.php';
+require_once __DIR__ . '/extensions/core/list.php';
 require_once __DIR__ . '/style/balloon.php';
+require_once __DIR__ . '/style/flow.php';
 require_once __DIR__ . '/style/hidden-extension.php';
 require_once __DIR__ . '/style/common-margin.php';
-require_once __DIR__ . '/extensions/core/heading.php';
-require_once __DIR__ . '/extensions/core/list.php';
 require_once __DIR__ . '/view/responsive-br.php';
 require_once __DIR__ . '/view/class-vk-blocks-postlist.php';
 require_once __DIR__ . '/view/class-vk-blocks-scrollhintrenderer.php';
@@ -99,6 +101,17 @@ add_filter(
  */
 function vk_blocks_blocks_assets() {
 	$vk_blocks_options = VK_Blocks_Options::get_options();
+	$has_theme_json    = false;
+
+	// テーマに theme.json があるかどうかを判定（ content-width-half のパネル表示制御で使用 ）
+	if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+		$has_theme_json = true;
+	} elseif ( function_exists( 'wp_theme_has_theme_json' ) ) {
+		$has_theme_json = wp_theme_has_theme_json();
+	} else {
+		$theme          = wp_get_theme();
+		$has_theme_json = file_exists( $theme->get_stylesheet_directory() . '/theme.json' ) || file_exists( $theme->get_template_directory() . '/theme.json' );
+	}
 
 	// プロ版の値をフロントエンドに出力.
 	include_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -117,6 +130,7 @@ function vk_blocks_blocks_assets() {
 			'balloon_meta_lists'          => $vk_blocks_options['balloon_meta_lists'],
 			'custom_format_lists'         => $vk_blocks_options['custom_format_lists'],
 			'block_variation_lists'       => $vk_blocks_options['block_variation_lists'],
+			'has_theme_json'              => $has_theme_json,
 		)
 	);
 
@@ -164,28 +178,27 @@ function vk_blocks_blocks_assets() {
 		),
 	);
 
-	$dynamic_css = '
-		:root {
-			--vk_flow-arrow: url(' . VK_BLOCKS_URL . 'images/arrow_bottom.svg);
-			--vk_image-mask-circle: url(' . VK_BLOCKS_URL . 'images/circle.svg);
-			--vk_image-mask-wave01: url(' . VK_BLOCKS_URL . 'images/wave01.svg);
-			--vk_image-mask-wave02: url(' . VK_BLOCKS_URL . 'images/wave02.svg);
-			--vk_image-mask-wave03: url(' . VK_BLOCKS_URL . 'images/wave03.svg);
-			--vk_image-mask-wave04: url(' . VK_BLOCKS_URL . 'images/wave04.svg);
-		}
-	';
-
 	// Pro版のためfunction_existsを挟む
+	$dynamic_css = '';
 	if ( function_exists( 'vk_blocks_get_custom_format_lists_inline_css' ) ) {
 		$dynamic_css .= vk_blocks_get_custom_format_lists_inline_css();
 	}
 
 	$dynamic_css = vk_blocks_minify_css( $dynamic_css );
 
-	wp_add_inline_style( 'vk-blocks-build-css', $dynamic_css );
-	wp_add_inline_style( 'vk-blocks-utils-common-css', $dynamic_css );
-	// --vk_image-mask-waveはコアの画像ブロックに依存するのでwp-edit-blocksを追加
-	wp_add_inline_style( 'wp-edit-blocks', $dynamic_css );
+	// 分割読み込みが有効な場合は、フロント側ではローダー側で該当ハンドルに付与する
+	if ( method_exists( 'VK_Blocks_Block_Loader', 'should_load_separate_assets' )
+		&& VK_Blocks_Block_Loader::should_load_separate_assets() && ! is_admin() ) {
+		if ( $dynamic_css ) {
+			wp_add_inline_style( 'vk-blocks-utils-common-css', $dynamic_css );
+		}
+	} elseif ( $dynamic_css ) {
+		// 一括読み込み時や管理画面では従来通り
+		wp_add_inline_style( 'vk-blocks-build-css', $dynamic_css );
+		wp_add_inline_style( 'vk-blocks-utils-common-css', $dynamic_css );
+		// エディターにも追加
+		wp_add_inline_style( 'wp-edit-blocks', $dynamic_css );
+	}
 }
 add_action( 'init', 'vk_blocks_blocks_assets', 10 );
 
@@ -215,5 +228,8 @@ if ( ! function_exists( 'vk_blocks_set_wp_version' ) ) {
  */
 function vk_blocks_load_scripts() {
 	wp_enqueue_script( 'vk-blocks-slider', VK_BLOCKS_DIR_URL . 'build/vk-slider.min.js', array( 'vk-swiper-script' ), VK_BLOCKS_VERSION, true );
+
+	// Group Block Scrollable Extension
+	wp_enqueue_script( 'vk-blocks-group-scrollable', VK_BLOCKS_DIR_URL . 'build/vk-group-scrollable.min.js', array(), VK_BLOCKS_VERSION, true );
 }
 add_action( 'wp_enqueue_scripts', 'vk_blocks_load_scripts' );
