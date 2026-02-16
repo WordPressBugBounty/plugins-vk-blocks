@@ -4,7 +4,7 @@ Donate link:
 Tags: Gutenberg,FAQ,alert
 Requires at least: 6.5
 Tested up to: 6.9
-Stable tag: 1.116.1.1
+Stable tag: 1.116.2.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -107,6 +107,10 @@ e.g.
 1. VK Blocks examples.
 
 == Changelog ==
+
+= 1.116.2 =
+[ Bug fix ][ Blog Card ( Pro ) ] Fixed external metadata fetching to support relative and protocol-relative URLs, and correctly retrieve information from category and archive pages.
+[ Bug fix ][ Core Table / Core Group ] Fixed an issue where horizontal scroll settings interfered between Table and Group blocks.
 
 = 1.116.1 =
 [ Bug fix ][ Fixed Display (Pro) ] Fixed an issue where guest actions could affect other visitors' fixed display visibility.
