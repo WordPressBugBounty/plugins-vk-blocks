@@ -23,10 +23,6 @@
       "type": "string",
       "default": ""
     },
-    "linkToPost": {
-      "type": "boolean",
-      "default": false
-    },
     "buttonSize": {
       "type": "string",
       "default": "md"
@@ -109,8 +105,5 @@
       "__experimentalTextTransform": true,
       "__experimentalLetterSpacing": true
     }
-  },
-  "usesContext": [
-    "queryId"
-  ]
+  }
 }
