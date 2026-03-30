@@ -14,16 +14,12 @@ if [ ! -f "readme.txt" ]; then
   exit 1
 fi
 
-# vk-blocks.php からバージョンを取得
-PHP_VERSION=$(grep -m1 "^ \* Version:" "$PLUGIN_FILE" | sed 's/.*Version: *//' | tr -d ' \r')
-echo "PHP_VERSION=$PHP_VERSION"
-
-# 3桁バージョンを取得（4桁目を除去）
-VERSION_3=$(echo "$PHP_VERSION" | sed 's/\.[0-9]*$//')
-echo "VERSION_3=$VERSION_3"
+# vk-blocks.php からバージョンを取得（3桁: X.X.X）
+VERSION=$(grep -m1 "^ \* Version:" "$PLUGIN_FILE" | sed 's/.*Version: *//' | tr -d ' \r')
+echo "VERSION=$VERSION"
 
 # readme.txt の Changelog に今のバージョンのヘッダーがあるか確認
-if grep -q "^= $VERSION_3 =" readme.txt; then
+if grep -q "^= $VERSION =" readme.txt; then
   CHANGELOG_HAS_VERSION=true
 else
   CHANGELOG_HAS_VERSION=false
@@ -32,7 +28,7 @@ echo "CHANGELOG_HAS_VERSION=$CHANGELOG_HAS_VERSION"
 
 # Changelog にバージョンなし変更エントリがあるか確認
 # "== Changelog ==" の直後から最初の "= X.X.X =" の前までの行を抽出
-UNVERSIONED=$(awk '/^== Changelog ==/{found=1; next} found && /^= [0-9]+\.[0-9]/{exit} found && /\S/{print}' readme.txt | head -5)
+UNVERSIONED=$(sed -n '/^== Changelog ==/,/^= [0-9]/p' readme.txt | grep -v "^== Changelog ==" | grep -v "^= [0-9]" | grep -v "^$" | head -5)
 if [ -n "$UNVERSIONED" ]; then
   HAS_UNVERSIONED=true
   echo "HAS_UNVERSIONED=true"
@@ -45,21 +41,13 @@ else
   echo "HAS_UNVERSIONED=false"
 fi
 
-# pre_ タグが存在するか確認
-if git tag | grep -q "^pre_${PHP_VERSION}$"; then
-  PRE_TAG_EXISTS=true
+# タグ（X.X.X）が存在するか確認
+if git tag | grep -q "^${VERSION}$"; then
+  TAG_EXISTS=true
 else
-  PRE_TAG_EXISTS=false
+  TAG_EXISTS=false
 fi
-echo "PRE_TAG_EXISTS=$PRE_TAG_EXISTS"
-
-# 本番タグが存在するか確認
-if git tag | grep -q "^${PHP_VERSION}$"; then
-  STABLE_TAG_EXISTS=true
-else
-  STABLE_TAG_EXISTS=false
-fi
-echo "STABLE_TAG_EXISTS=$STABLE_TAG_EXISTS"
+echo "TAG_EXISTS=$TAG_EXISTS"
 
 # 現在のブランチを確認
 CURRENT_BRANCH=$(git branch --show-current)
@@ -68,10 +56,8 @@ echo "CURRENT_BRANCH=$CURRENT_BRANCH"
 # 状態の判定
 if [ "$HAS_UNVERSIONED" = "true" ]; then
   STATE=NEEDS_VERSION
-elif [ "$PRE_TAG_EXISTS" = "false" ]; then
-  STATE=NEEDS_PRE_RELEASE
-elif [ "$STABLE_TAG_EXISTS" = "false" ]; then
-  STATE=NEEDS_STABLE_RELEASE
+elif [ "$TAG_EXISTS" = "false" ]; then
+  STATE=NEEDS_TAG
 else
   STATE=UP_TO_DATE
 fi
@@ -79,4 +65,5 @@ fi
 echo ""
 echo "=========================================="
 echo "STATE=$STATE"
-echo "=========================================="
+echo "==========================================
+"
