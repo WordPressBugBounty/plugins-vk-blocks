@@ -4,11 +4,10 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7461966a5a78984823fe39ef94c14931
+class ComposerStaticInitbba9f7b44b566c99387aebbd99974e4f
 {
     public static $files = array (
         'a5f882d89ab791a139cd2d37e50cdd80' => __DIR__ . '/..' . '/tgmpa/tgm-plugin-activation/class-tgm-plugin-activation.php',
-        'f6d4f6bcee7247df6b777884c3e22f98' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/load-v5p6.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -85,9 +84,9 @@ class ComposerStaticInit7461966a5a78984823fe39ef94c14931
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7461966a5a78984823fe39ef94c14931::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7461966a5a78984823fe39ef94c14931::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7461966a5a78984823fe39ef94c14931::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbba9f7b44b566c99387aebbd99974e4f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbba9f7b44b566c99387aebbd99974e4f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbba9f7b44b566c99387aebbd99974e4f::$classMap;
 
         }, null, ClassLoader::class);
     }
