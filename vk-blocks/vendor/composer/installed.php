@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'vektor/vk-blocks-pro',
-        'pretty_version' => '1.124.0',
-        'version' => '1.124.0.0',
-        'reference' => '2f6c0c119a1e1b3ab41bd65179477072b15be697',
+        'pretty_version' => '1.125.0',
+        'version' => '1.125.0.0',
+        'reference' => 'd7cfd1ab301ab0079e67b783e6ed33b832bb5691',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -85,9 +85,9 @@
             'dev_requirement' => false,
         ),
         'vektor-inc/vk-swiper' => array(
-            'pretty_version' => '0.3.6',
-            'version' => '0.3.6.0',
-            'reference' => '5aae7f0238159cf4e27520e43bd5cd1da1248c16',
+            'pretty_version' => '0.4.0',
+            'version' => '0.4.0.0',
+            'reference' => 'aa8d0d90251426f5d14fb2c317f2c2fba703a374',
             'type' => 'library',
             'install_path' => __DIR__ . '/../vektor-inc/vk-swiper',
             'aliases' => array(),
@@ -103,9 +103,9 @@
             'dev_requirement' => false,
         ),
         'vektor/vk-blocks-pro' => array(
-            'pretty_version' => '1.124.0',
-            'version' => '1.124.0.0',
-            'reference' => '2f6c0c119a1e1b3ab41bd65179477072b15be697',
+            'pretty_version' => '1.125.0',
+            'version' => '1.125.0.0',
+            'reference' => 'd7cfd1ab301ab0079e67b783e6ed33b832bb5691',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

@@ -32,6 +32,14 @@
       "type": "boolean",
       "default": false
     },
+    "linkToCustomField": {
+      "type": "boolean",
+      "default": false
+    },
+    "linkCustomFieldName": {
+      "type": "string",
+      "default": ""
+    },
     "buttonSize": {
       "type": "string",
       "default": "md",
@@ -182,6 +190,7 @@
     }
   },
   "usesContext": [
-    "queryId"
+    "queryId",
+    "postId"
   ]
 }
