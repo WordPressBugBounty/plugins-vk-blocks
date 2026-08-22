@@ -85,6 +85,12 @@
     "buttonColorCustom": {
       "type": "string"
     },
+    "buttonBorderColorCustom": {
+      "type": "string"
+    },
+    "buttonHoverBorderColorCustom": {
+      "type": "string"
+    },
     "buttonAlign": {
       "type": "string",
       "default": "left",
