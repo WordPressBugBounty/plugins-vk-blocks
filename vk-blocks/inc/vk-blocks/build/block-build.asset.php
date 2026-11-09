@@ -13,6 +13,7 @@
 		'wp-data',
 		'wp-element',
 		'wp-hooks',
+		'wp-html-entities',
 		'wp-i18n',
 		'wp-notices',
 		'wp-plugins',
@@ -21,5 +22,5 @@
 		'wp-server-side-render',
 		'wp-url'
 	),
-	'version' => 'b8385df948a771fa7fa4'
+	'version' => '5302cb7b5dc108eafc0f'
 );
